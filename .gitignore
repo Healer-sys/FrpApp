@@ -1,0 +1,9 @@
+/.vscode
+# Object files
+*.o
+*.sbr
+
+# Debugger files
+# define exception below if needed
+*.ini
+*.json

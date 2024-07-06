@@ -1,3 +1,6 @@
+#ifndef _MENU_H_
+#define _MENU_H_
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -17,3 +20,5 @@ void runNode();
 void displayMainMenu();
 void displaySubMenu();
 void Menu();
+
+#endif

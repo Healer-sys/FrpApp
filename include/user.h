@@ -1,5 +1,6 @@
-#ifndef __USER_H
-#define __USER_H
+#ifndef _USER_H_
+#define _USER_H_
+
 typedef struct UserDataStruct
 {
 	char *username;

@@ -1,46 +1,7 @@
 #include "get.h"
 
-
-size_t get_data(char *duffer, size_t size, size_t nmemd, void **userp){
-	size_t bytes = size * nmemd;
-    // 将 userp 空指针强制转换为 char* 类型的指针
-    char *data = (char*)(*userp);
-    // 重新为 data 分配空间
-    char *new_data = realloc(data, bytes + 1);
-    // 判断是否开辟空间成功
-    if (new_data == NULL) {
-        // 如果不成功
-        fprintf(stderr, "Not enough memory (realloc returned NULL)\n");
-        return 0;
-    }
-    // 将获取的内容拷贝到 data 中
-    memcpy(new_data, duffer, bytes);
-    // 在 data 中的最后位置赋予一个 '\0'
-    new_data[bytes] = '\0';
-    // 将新分配的指针返回给调用者
-    *userp = new_data;
-    return bytes;
-}
-
-const char *get_url(const char *url){
-	CURL *curl = NULL;
-	const char *data = NULL;
-	CURLcode ret;
-    curl = curl_easy_init();
-	if(curl){
-		curl_easy_setopt(curl, CURLOPT_URL, url);//设置链接
-		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, get_data);//设置回调函数
-		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &data);//回调指针
-		ret = curl_easy_perform(curl);//请求
-	}
-	//清除url句柄
-	curl_easy_cleanup(curl);
-	curl = NULL;
-	return data;
-}
-
 //获取服务器列表并保留自己有的服务器
-int GetServerList(const char *username, const char *token, const char *frptoken) {
+int GetServerList(UserData_t* user) {
 
     FILE *fd = NULL;
     fd = fopen("me.ini","w+");
@@ -48,7 +9,7 @@ int GetServerList(const char *username, const char *token, const char *frptoken)
     char GetProxiesList_Url[200]  = {0};
 
     //拼接用户节点信息url
-    sprintf((char *)GetProxiesList_Url,"https://api.locyanfrp.cn/Proxies/GetProxiesList?username=%s&token=%s",username,token);
+    sprintf((char *)GetProxiesList_Url,"https://api.locyanfrp.cn/Proxies/GetProxiesList?username=%s&token=%s",user->username,user->token);
     struct json_object *j_GetProxiesList = json_tokener_parse( get_url(GetProxiesList_Url) );
     if (j_GetProxiesList == NULL) {
         fprintf(stderr, "Error parsing JSON j_GetProxiesList\n");
@@ -157,7 +118,7 @@ int GetServerList(const char *username, const char *token, const char *frptoken)
                     fwrite("protocol = tcp\n", 1, 16, fd);
                     fwrite("tcp_mux = true\n", 1, 16, fd);
                     //写user
-                    sprintf((char *)data,"user = %s\n",frptoken);
+                    sprintf((char *)data,"user = %s\n",user->frptoken);
                     fwrite(data, 1, strlen(data), fd);
                     //写token
                     fwrite("token = LoCyanToken\n", 1, 21, fd);
@@ -203,12 +164,12 @@ int GetServerList(const char *username, const char *token, const char *frptoken)
 /*
     显示节点信息
 */
-void ShowNode(char *username,char *token)
+void ShowNode(UserData_t* user)
 {
     int count;
     char GetProxiesList_Url[200];
 
-    sprintf((char *)GetProxiesList_Url,"https://api.locyanfrp.cn/Proxies/GetProxiesList?username=%s&token=%s",username,token);
+    sprintf((char *)GetProxiesList_Url,"https://api.locyanfrp.cn/Proxies/GetProxiesList?username=%s&token=%s",user->username,user->token);
     struct json_object *j_GetProxiesList = json_tokener_parse( get_url(GetProxiesList_Url) );
     struct json_object *temp;
     //printf("j_GetProxiesList is %s\n", json_object_get_string(j_GetProxiesList));
@@ -234,4 +195,9 @@ void ShowNode(char *username,char *token)
     }
     json_object_put(j_GetProxiesList);
     json_object_put(temp);
+}
+
+int id_form_proxy(int id, UserData_t *user)
+{
+    return 0;
 }

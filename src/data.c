@@ -1,7 +1,7 @@
 #include "data.h"
 //处理数据
 
-void handle_data(char* data, UserData_t *user){
+void HandleUserData(char* data, UserData_t *user){
     //const char *file_string;
     //UserData user;
     FILE *fd = NULL;

@@ -1,6 +1,5 @@
-#ifndef __DATA_H
-#define __DATA_H
-
+#ifndef _DATA_H_
+#define _DATA_H_
 
 #include <stdio.h>
 #include <string.h>
@@ -8,6 +7,6 @@
 #include "user.h"
 #include "json-c/json.h"
 
-void handle_data(char* data, UserData_t *user);
+void HandleUserData(char* data, UserData_t *user);
 
 #endif

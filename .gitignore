@@ -1,4 +1,5 @@
 /.vscode
+/bin
 # Object files
 *.o
 *.sbr
@@ -7,3 +8,6 @@
 # define exception below if needed
 *.ini
 *.json
+*.log
+*.txt
+*.xml

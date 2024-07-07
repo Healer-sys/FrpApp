@@ -11,3 +11,5 @@
 *.log
 *.txt
 *.xml
+*.json
+bin/main

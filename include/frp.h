@@ -20,10 +20,20 @@ typedef struct FrpListStruct
 
 // 初始化链表
 FrpList_t* InitFrpList();
+static FrpList_t* FrpList = NULL;
 
 int get_json_int(json_object *jso, const char *key);
 char* get_json_string(json_object *jso, const char *key);
 
-int GetFrpServerList(FrpList_t* frp);
+FrpList_t* GetFrpList();
+FrpList_t* GetServerForId(int id);
+// 获取服务器列表
+int GetFrpServerList();
+// 更新服务器列表
+int UpdateFrpServerList();
+// 显示服务器列表
+void ShowAllList();
+void ShowList(FrpList_t* P);
+void free_frp_list();
 
 #endif

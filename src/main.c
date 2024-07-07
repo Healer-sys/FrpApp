@@ -7,28 +7,14 @@
 int main(int argc, char **argv)
 {
 	UserData_t *user = (UserData_t *)malloc(sizeof(UserData_t));
-	FrpList_t frp[100];
-	//chushihua
-	
-	for(int i = 0; i < 100; i++) {
-		FrpList_t* frp_ = (FrpList_t*)malloc(sizeof(FrpList_t));
-		frp[i] = *frp_;
-	}
-	
-	if( !GetFrpServerList(frp) ) {
+
+	if( !GetFrpServerList() ) {
 		printf("err\n");
 	}
-
-	for (int i = 0; i < 100; i++) {
-		printf("%d:%d\n",i,frp[i].id);
-        printf("%d %s %s %s %s %s\n", i, frp[i].name, frp[i].description, frp[i].ip, frp[i].hostname, frp[i].status);
+	else {
+		// ShowList(GetServerForId(49));
 	}
 
-	// FrpList_t* frplist = InitFrpList();
-	// if(frplist == NULL) {
-	// 	printf("chushihuashibian\n");
-	// }
-	
 	// welcome();
 
 	// Menu();
@@ -37,14 +23,14 @@ int main(int argc, char **argv)
 	user->password = argv[2];
 	if( !login(user) ) {
 		//printf("ok\n");
+		free_frp_list();
+		free(user);
 		return 0;
 	}
 
 	GetServerList(user);
 	ShowNode(user);
-	for(int i = 0; i < 100; i++) {
-		free(&frp[i]);
-	}
+	free_frp_list();
 	free(user);
 	return 0;
 }

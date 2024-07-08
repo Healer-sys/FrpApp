@@ -12,9 +12,8 @@ int main(int argc, char **argv)
 		printf("err\n");
 	}
 	else {
-		// ShowList(GetServerForId(49));
+		// free_frp_list();
 	}
-
 	// welcome();
 
 	// Menu();
@@ -27,9 +26,11 @@ int main(int argc, char **argv)
 		free(user);
 		return 0;
 	}
+	else {
 
-	GetServerList(user);
-	ShowNode(user);
+	}
+	// GetServerList(user);
+	// ShowNode(user);
 	free_frp_list();
 	free(user);
 	return 0;

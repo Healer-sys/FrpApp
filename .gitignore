@@ -1,5 +1,5 @@
 /.vscode
-/bin
+/bin/*
 # Object files
 *.o
 *.sbr
@@ -12,4 +12,3 @@
 *.txt
 *.xml
 *.json
-bin/main

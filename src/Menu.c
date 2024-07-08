@@ -25,8 +25,9 @@ void welcome() {
 
 // 获取节点操作
 void getNode() {
-    printf("获取节点操作\n");
+    // printf("获取节点操作\n");
     // 在这里实现获取节点的具体逻辑
+    ShowAllList();
 }
 
 // 添加节点操作
@@ -106,6 +107,7 @@ void Menu() {
                         break;
                     case 3:
                         printf("返回上级菜单\n");
+                        Menu();
                         break;
                     case 4:
                         clearScreen();

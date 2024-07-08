@@ -22,18 +22,29 @@ size_t get_data(char *duffer, size_t size, size_t nmemd, void **userp){
 }
 
 const char *get_url(const char *url){
-	CURL *curl = NULL;
-	const char *data = NULL;
-	CURLcode ret;
-    curl = curl_easy_init();
-	if(curl){
-		curl_easy_setopt(curl, CURLOPT_URL, url);                       //设置链接
-		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, get_data);        //设置回调函数
-		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &data);               //回调指针
-		ret = curl_easy_perform(curl);                                  //请求
-	}
-	//清除url句柄
-	curl_easy_cleanup(curl);
-	curl = NULL;
-	return data;
+    CURL *curl = curl_easy_init();
+    if (!curl) {
+        fprintf(stderr, "curl_easy_init failed\n");
+        return NULL;
+    }
+
+    char *data = NULL; // 使用可修改的字符数组
+    CURLcode ret;
+    curl_easy_setopt(curl, CURLOPT_URL, url); // 设置链接
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, get_data); // 设置回调函数
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &data); // 使用data指针
+
+    ret = curl_easy_perform(curl);
+    if (ret != CURLE_OK) {
+        fprintf(stderr, "curl_easy_perform failed: %s\n", curl_easy_strerror(ret));
+        // 在出错时清理
+        free(data); // 确保释放之前分配的内存
+        curl_easy_cleanup(curl);
+        return "err";
+    }
+
+    // 成功后清除url句柄，但不释放data，因为它可能被外部使用
+    curl_easy_cleanup(curl);
+    curl = NULL;
+    return data;
 }

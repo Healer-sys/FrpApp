@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include "frp.h"
 
 void clearScreen();
 void welcome();

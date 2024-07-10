@@ -166,38 +166,20 @@ int GetServerList(UserData_t* user) {
 */
 void ShowNode(UserData_t* user)
 {
-    int count;
-    char GetProxiesList_Url[200];
-
-    sprintf((char *)GetProxiesList_Url,"https://api.locyanfrp.cn/Proxies/GetProxiesList?username=%s&token=%s",user->username,user->token);
-    struct json_object *j_GetProxiesList = json_tokener_parse( get_url(GetProxiesList_Url) );
-    struct json_object *temp;
-    //printf("j_GetProxiesList is %s\n", json_object_get_string(j_GetProxiesList));
-    json_object_object_get_ex(j_GetProxiesList,"count",&temp);
-    //printf("count is %s\n", json_object_get_string(temp));
-    count = json_object_get_int(temp);
-    json_object_object_get_ex(j_GetProxiesList, "proxies", &j_GetProxiesList);
-    //printf("proxies is %s\n", json_object_get_string(j_GetProxiesList));
-    for(int i = 0; i < count; i++)
+    int count = 0;
+    Tunnel_t *P = user->tunnel->next;
+    while(P != NULL )
     {
-        json_object *proxy1 = json_object_array_get_idx(j_GetProxiesList, i);
-        json_object_object_get_ex(proxy1,"proxy_name",&temp);
-        printf("节点%d:\n", i+1);
-        printf("节点名字:%s\n", json_object_get_string(temp));
-
-        json_object_object_get_ex(proxy1,"local_port",&temp);
-        printf("内端口:%s\n", json_object_get_string(temp));
-
-        json_object_object_get_ex(proxy1,"remote_port",&temp);
-        printf("外端口:%s\n", json_object_get_string(temp));
-        json_object_put(proxy1);
-        printf("\n");
+        FrpList_t* Server = GetServerForId(P->node);
+        printf("***************************************************************************************************************\n");
+        printf("*隧道->%d\n",++count);
+        printf("*服务名字:%s\n",Server->name);
+        printf("*隧道名字:%s\n",P->proxy_name);
+        printf("*隧道id:%d\n",P->id);
+        printf("*隧道类型:%s\n", P->proxy_type);
+        printf("*服务器介绍:%s\n",Server->description);
+        printf("*链接地址:%s\n", Server->hostname);
+        printf("***************************************************************************************************************\n");
+        P = P->next;
     }
-    json_object_put(j_GetProxiesList);
-    json_object_put(temp);
-}
-
-int id_form_proxy(int id, UserData_t *user)
-{
-    return 0;
 }

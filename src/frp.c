@@ -21,18 +21,24 @@ FrpList_t* InitFrpList()
 char *get_json_string(json_object *jso, const char *key) {
     json_object *jso_value = json_object_object_get(jso, key);
     if (!jso_value || (json_object_get_type(jso_value) != json_type_string)) {
-        fprintf(stderr, "get_json_string err: JSON 对象中没有key或者缺失: %s\n", key);
+        fprintf(stderr, "get_json_string err: [JSON 对象中没有key或者缺失: key is %s!]\n", key);
         return NULL;
     }
+    #ifdef DEBUG
+    printf("get_json_string: [%s's jso_value is %s]\n", key, json_object_get_string(jso_value));
+    #endif
     return (char *)json_object_get_string(jso_value);
 }
 
 int get_json_int(json_object *jso, const char *key) {
     json_object *jso_value = json_object_object_get(jso, key);
     if (!jso_value || (json_object_get_type(jso_value) != json_type_int)) {
-        fprintf(stderr, "get_json_int err: JSON 对象中没有key或者缺失: %s\n", key);
+        fprintf(stderr, "get_json_int err: [JSON 对象中没有key或者缺失: key is %s!]\n", key);
         return -1;
     }
+    #ifdef DEBUG
+    printf("get_json_int: [%s's jso_value is %d]\n", key, json_object_get_int(jso_value));
+    #endif
     return json_object_get_int(jso_value);
 }
 
@@ -40,7 +46,7 @@ FrpList_t *GetFrpList()
 {
     return FrpList;
 }
-
+// 根据服务器ID获取服务器信息
 FrpList_t *GetServerForId(int id)
 {
     if (FrpList == NULL) {
@@ -54,7 +60,19 @@ FrpList_t *GetServerForId(int id)
     }
     return NULL;
 }
-
+// 根据服务器名称获取服务器信息
+FrpList_t *GetServerForName(const char* Servername) {
+    if (FrpList == NULL) {
+        return NULL;
+    }
+    FrpList_t* P = FrpList->next;
+    while(P != NULL)
+    {
+        if( strcmp(P->name, Servername) == 0 ) return P;
+        P = P->next;
+    }
+    return NULL;
+}
 int GetFrpServerList()
 {
     if(FrpList == NULL) {

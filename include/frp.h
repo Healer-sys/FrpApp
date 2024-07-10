@@ -27,6 +27,7 @@ char* get_json_string(json_object *jso, const char *key);
 
 FrpList_t* GetFrpList();
 FrpList_t* GetServerForId(int id);
+FrpList_t* GetServerForName(const char* Servername);
 // 获取服务器列表
 int GetFrpServerList();
 // 更新服务器列表

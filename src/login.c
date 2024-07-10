@@ -10,6 +10,9 @@ char login(UserData_t *user)
     char url[200] = {0};
     // 使用snprintf避免溢出，确保URL长度不超过数组大小
     snprintf(url, sizeof(url), "https://api.locyanfrp.cn/User/DoLogin?username=%s&password=%s", user->username, user->password);
+    #ifdef DEBUG
+    printf("[Login URL : %s]\n",url);
+    #endif
     char *login_data = (char*)get_url(url);
     if (!login_data) {
         printf("获取URL数据失败\n");
@@ -35,7 +38,7 @@ char login(UserData_t *user)
     if (status_code >= 0) {
         // 保存数据
         #ifdef DEBUG
-        printf("正在保存数据.%s\n",login_data);
+        printf("正在保存数据 -> %s\n",login_data);
         #endif
         HandleUserData(login_data, user);
         printf("登录成功！\n");
@@ -47,7 +50,7 @@ char login(UserData_t *user)
     printf("%s\n",json_object_get_string(j_login));
     #endif
 
-    // json_object_put(j_login);  // 释放j_login内存
-    // free(login_data);          // 释放login_data内存
+    json_object_put(j_login);  // 释放j_login内存
+    free(login_data);          // 释放login_data内存
     return status_code >= 0 ? 1 : 0;
 }

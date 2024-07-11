@@ -79,13 +79,14 @@ int GetFrpServerList()
         FrpList = InitFrpList();
     }
     FrpList_t* P = FrpList;
-
-    struct json_object *j_GetServerList = json_tokener_parse(get_url("https://api.locyanfrp.cn/Proxies/GetServerList"));
+    char* buffer = get_url("https://api.locyanfrp.cn/Proxies/GetServerList");
+    struct json_object *j_GetServerList = json_tokener_parse(buffer);
     if (j_GetServerList == NULL) {
+        free(buffer);
         fprintf(stderr, "Error: 无法从 URL 解析 JSON\n");
         return 0;
     }
-
+    free(buffer);
     int ListLength = json_object_array_length(j_GetServerList);
 
     for(int i = 0; i < ListLength; i++) {

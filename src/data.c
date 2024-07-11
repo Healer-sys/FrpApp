@@ -32,7 +32,6 @@ void HandleUserData(char* data, UserData_t *user) {
     // 处理userdata
     if (json_object_object_get_ex(key, "userdata", &j_userdata)) {
         if (json_object_object_get_ex(j_userdata, "username", &val)) {
-            user->username = strdup(json_object_get_string(val));
             json_object_object_add(j_userdata_key, "username", json_object_get(val));
         } else {
             fprintf(stderr, "错误：在userdata JSON数据中找不到username键\n");

@@ -35,11 +35,14 @@ void get_tunnel(UserData_t *user) {
     #ifdef DEBUG
     printf("get_tunnel->GetTunnel_Url: %s\n",GetTunnel_Url);
     #endif
-    struct json_object *j_TunnelList = json_tokener_parse( get_url(GetTunnel_Url) );
+    char* buffer = (char* )get_url(GetTunnel_Url);
+    struct json_object *j_TunnelList = json_tokener_parse( buffer );
     if (j_TunnelList == NULL) {
         fprintf(stderr, "Error parsing JSON j_GetProxiesList\n");
+        free(buffer);
         return;
     }
+    free(buffer);
 
 
     if (get_json_int(j_TunnelList, "status") == 0) {
@@ -54,7 +57,8 @@ void get_tunnel(UserData_t *user) {
     }
 
     int count = get_json_int(j_TunnelList, "count");
-    if ( count && json_object_object_get_ex(j_TunnelList, "proxies", &j_TunnelList) ) {
+    json_object *j_TunnelListProxies = NULL;
+    if ( count && json_object_object_get_ex(j_TunnelList, "proxies", &j_TunnelListProxies) ) {
 
         #ifdef DEBUG
         printf("get_tunnel->proxies: %s\n",json_object_to_json_string(j_TunnelList));
@@ -78,7 +82,7 @@ void get_tunnel(UserData_t *user) {
                 return ;
             }
 
-            json_object *temp = json_object_array_get_idx(j_TunnelList, i);
+            json_object *temp = json_object_array_get_idx(j_TunnelListProxies, i);
 
             new_turnel->id                = get_json_int(temp, "id");
             new_turnel->node              = get_json_int(temp, "node");

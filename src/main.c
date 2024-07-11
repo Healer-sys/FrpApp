@@ -23,13 +23,18 @@ int main(int argc, char **argv)
 
 
 	//step 2 登陆并且获取隧道信息
-	user->username = strdup(argv[1]);
-	user->password = strdup(argv[2]);
+	if(argc > 2) {
+		user->username = strdup(argv[1]);
+		user->password = strdup(argv[2]);
+	}
+
 	if( !login(user) ) {
 		//printf("ok\n");
 		free_frp_list();
-		free(user->password);
-		free(user->username);
+		if (argc > 2) {
+			free(user->password);
+			free(user->username);
+		}
 		free(user);
 		// free(user);
 		return 0;

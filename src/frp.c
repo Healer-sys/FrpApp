@@ -73,8 +73,10 @@ FrpList_t *GetServerForName(const char* Servername) {
     }
     return NULL;
 }
-int GetFrpServerList()
+void* GetFrpServerList()
 {
+    pthread_return* returnval = (pthread_return*)malloc(sizeof(pthread_return));
+    returnval->return_value = 0;
     if(FrpList == NULL) {
         FrpList = InitFrpList();
     }
@@ -84,7 +86,7 @@ int GetFrpServerList()
     if (j_GetServerList == NULL) {
         free(buffer);
         fprintf(stderr, "Error: 无法从 URL 解析 JSON\n");
-        return 0;
+        pthread_exit((void*)returnval);
     }
     free(buffer);
     int ListLength = json_object_array_length(j_GetServerList);
@@ -93,7 +95,7 @@ int GetFrpServerList()
         FrpList_t* new_server = InitFrpList();
         if (new_server == NULL) {
             json_object_put(j_GetServerList);
-            return 0;
+            pthread_exit((void*)returnval);
         }
 
         json_object *temp = json_object_array_get_idx(j_GetServerList, i);
@@ -114,7 +116,8 @@ int GetFrpServerList()
     }
 
     json_object_put(j_GetServerList);
-    return 1;
+    returnval->return_value = 1;
+    pthread_exit((void*)returnval);
 }
 
 int UpdateFrpServerList()

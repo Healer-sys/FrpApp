@@ -18,6 +18,10 @@ typedef struct FrpListStruct
     struct FrpListStruct* next;
 }FrpList_t;
 
+typedef struct {
+	int return_value;
+}pthread_return;
+
 // 初始化链表
 FrpList_t* InitFrpList();
 static FrpList_t* FrpList = NULL;
@@ -29,7 +33,7 @@ FrpList_t* GetFrpList();
 FrpList_t* GetServerForId(int id);
 FrpList_t* GetServerForName(const char* Servername);
 // 获取服务器列表
-int GetFrpServerList();
+void* GetFrpServerList();
 // 更新服务器列表
 int UpdateFrpServerList();
 // 显示服务器列表

@@ -1,7 +1,7 @@
 # 编译器和源文件目录
 CC = gcc
 CFLAGS = -I./include -Wall -Wextra
-LDFLAGS = -lcurl -ljson-c
+LDFLAGS = -lcurl -ljson-c -lpthread
 
 # 源文件和目标文件
 SRCS = $(wildcard src/*.c)

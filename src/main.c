@@ -1,3 +1,4 @@
+#include <pthread.h>
 #include "data.h"
 #include "login.h"
 #include "get.h"
@@ -7,20 +8,41 @@
 #include "Menu.h"
 UserData_t *user;
 
+#define pthreadmax 2
+
 int main(int argc, char **argv)
 {	
 
-    welcome();
 	user = (UserData_t *)malloc(sizeof(UserData_t));
 
+	pthread_t tid[pthreadmax];		// 线程句柄
+	int rc;							// 线程返回值
+
+	rc = pthread_create(&tid[0], NULL, welcome, NULL);
+	rc = pthread_create(&tid[1], NULL, GetFrpServerList, NULL);
+    if (rc != 0) {
+        printf("welcome线程创建失败");
+        return 0;
+    }
+	pthread_join(tid[1], NULL);
+    // welcome();
+
+
 	//step 1 获取服务器
-	if( !GetFrpServerList() ) {
-		printf("err\n");
+	// rc = pthread_create(&tid[1], NULL, GetFrpServerList, NULL);
+    if (rc != 0) {
+        printf("GetFrpServerList线程创建失败");
+        return 0;
+    }
+	pthread_return* pthread_return_value;
+	if( pthread_join(tid[1], (void**)&pthread_return_value) != 0 && !pthread_return_value->return_value ) {
+		printf("GetFrpServerListerr\n");
 	}
 	else {
 		// free_frp_list();
 	}
-
+	printf("GetFrpServerList return is :%d\n", pthread_return_value->return_value);
+	free(pthread_return_value);
 
 	//step 2 登陆并且获取隧道信息
 	if(argc > 2) {
@@ -67,10 +89,10 @@ int main(int argc, char **argv)
 }
 
 
-__attribute__((constructor)) void init()
-{
-	system("clear");
-}
+// __attribute__((constructor)) void init()
+// {
+// 	system("clear");
+// }
 
 // __attribute__((destructor)) void modfexit()
 // {

@@ -17,32 +17,32 @@ int main(int argc, char **argv)
 
 	pthread_t tid[pthreadmax];		// 线程句柄
 	int rc;							// 线程返回值
+	pthread_return* return_value;
 
 	rc = pthread_create(&tid[0], NULL, welcome, NULL);
-	rc = pthread_create(&tid[1], NULL, GetFrpServerList, NULL);
+	
     if (rc != 0) {
         printf("welcome线程创建失败");
         return 0;
     }
-	pthread_join(tid[1], NULL);
-    // welcome();
-
-
-	//step 1 获取服务器
-	// rc = pthread_create(&tid[1], NULL, GetFrpServerList, NULL);
-    if (rc != 0) {
+	rc = pthread_create(&tid[1], NULL, GetFrpServerList, NULL);
+	if (rc != 0) {
         printf("GetFrpServerList线程创建失败");
         return 0;
     }
-	pthread_return* pthread_return_value;
-	if( pthread_join(tid[1], (void**)&pthread_return_value) != 0 && !pthread_return_value->return_value ) {
+	pthread_join(tid[0], NULL);
+	pthread_join(tid[1], (void**)&return_value);
+
+	//step 1 获取服务器
+	// rc = pthread_create(&tid[1], NULL, GetFrpServerList, NULL);
+	if( !return_value->result ) {
 		printf("GetFrpServerListerr\n");
 	}
 	else {
 		// free_frp_list();
 	}
-	printf("GetFrpServerList return is :%d\n", pthread_return_value->return_value);
-	free(pthread_return_value);
+	printf("GetFrpServerList return is :%d\n", return_value->result);
+	free(return_value);
 
 	//step 2 登陆并且获取隧道信息
 	if(argc > 2) {

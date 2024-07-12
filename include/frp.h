@@ -19,7 +19,7 @@ typedef struct FrpListStruct
 }FrpList_t;
 
 typedef struct {
-	int return_value;
+	int result;
 }pthread_return;
 
 // 初始化链表

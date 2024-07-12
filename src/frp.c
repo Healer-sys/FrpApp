@@ -75,8 +75,8 @@ FrpList_t *GetServerForName(const char* Servername) {
 }
 void* GetFrpServerList()
 {
-    pthread_return* returnval = (pthread_return*)malloc(sizeof(pthread_return));
-    returnval->return_value = 0;
+    pthread_return* returnval = (pthread_return*)malloc( sizeof(pthread_return) );
+    returnval->result = 0;
     if(FrpList == NULL) {
         FrpList = InitFrpList();
     }
@@ -116,7 +116,7 @@ void* GetFrpServerList()
     }
 
     json_object_put(j_GetServerList);
-    returnval->return_value = 1;
+    returnval->result = 1;
     pthread_exit((void*)returnval);
 }
 

@@ -110,11 +110,11 @@ void download_all(UserData_t* user) {
 
 void download_one(UserData_t* user) {
     // 清屏
-    #ifdef _WIN32
-        system("cls"); // 在 Windows 上使用 cls 命令
-    #else
-        system("clear"); // 在类 Unix 系统上使用 clear 命令
-    #endif
+    // #ifdef _WIN32
+    //     system("cls"); // 在 Windows 上使用 cls 命令
+    // #else
+    //     system("clear"); // 在类 Unix 系统上使用 clear 命令
+    // #endif
     // 检查用户数据是否有效
     if (user == NULL) {
         printf("[download_one: 用户数据为空]\n");

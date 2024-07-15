@@ -10,120 +10,174 @@ void clearScreen() {
 }
 
 // 欢迎界面
-void welcome() {
+void* welcome() {
     printf("******** 欢迎使用节点管理系统 ********\n");
     fflush(stdout); // 刷新输出缓冲区，确保加载信息即时显示
 
     for (int i = 0; i < 38; ++i) {
-        usleep(20000); // 模拟加载延迟，可以根据实际情况调整
+        usleep(30000); // 模拟加载延迟，可以根据实际情况调整
         printf(">");
         fflush(stdout);
     }
 
     printf("\n");
+    pthread_exit(NULL);
+}
+// 创建一个新的菜单节点
+MenuNode_t* createMenu(const char *title, void (*function)(Context_t)) {
+    MenuNode_t *node = (MenuNode_t*)malloc(sizeof(MenuNode_t));
+    node->title = strdup(title);
+    node->function = function;
+    node->children = NULL;
+    node->child_count = 0;
+    node->parent = NULL;
+    return node;
 }
 
-// 获取节点操作
-void getNode() {
-    ShowAllList();
+void exit_menu(Context_t context) {
+    printf("谢谢使用，再见！\n");
+}
+void ShowUserInfo_menu(Context_t context) {
+    GetUserInfo(context.user);
+}
+void Check_in_menu(Context_t context) {
+    printf("该项目正在开发中！\n");
+    // CheckIn(context.user);
+}
+void About_menu(Context_t context) {
+    printf("该项目正在开发中！\n");
+}
+void Showtunnellist_menu(Context_t context) {
+    ShowNode(context.user);
+}
+void DlconfigOne_menu(Context_t context) {
+    download_one(context.user);
+}
+void DlconfigAll_menu(Context_t context) {
+    download_all(context.user);
+}
+void Startserver_menu(Context_t context) {
+    printf("该项目正在开发中！\n");
+    // StartServer(context.user);
+}
+void addtunnel_menu(Context_t context) {
+    printf("该项目正在开发中！\n");
+    // AddTunnel(context.user);
+}
+void Dlfrp_menu(Context_t context) {
+    printf("该项目正在开发中！\n");
+    // DownloadFrp(context.user);
+}
+void Serverstatus_menu(Context_t context) {
+    printf("该项目正在开发中！\n");
+    // ServerStatus(context.user);
+}
+void Document_menu(Context_t context) {
+    printf("该项目正在开发中！\n");
+}
+// 添加菜单点到父菜单上
+void RegisterMenu(MenuNode_t *parent, MenuNode_t *child) {
+    parent->children = (MenuNode_t**)realloc(parent->children, sizeof(MenuNode_t*) * (parent->child_count + 1));
+    child->parent = parent;
+    parent->children[parent->child_count++] = child;
 }
 
-// 添加节点操作
-void addNode() {
-    printf("添加节点操作\n");
-    // 在这里实现添加节点的具体逻辑
-}
-
-// 运行节点操作
-void runNode() {
-    printf("运行节点操作\n");
-    // 在这里实现运行节点的具体逻辑
-}
-
-// 显示主菜单
-void displayMainMenu() {
-    printf("***** 主菜单 *****\n");
-    printf("1. 浏览节点\n");
-    printf("2. 添加节点\n");
-    printf("3. 下载节点运行节点\n");
-    printf("4. 直接退出\n");
-    printf("请选择操作（1-4）：");
-}
-
-// 显示二级菜单
-void displaySubMenu() {
-    printf("***** 二级菜单 *****\n");
-    printf("1. 操作 1\n");
-    printf("2. 操作 2\n");
-    printf("3. 返回上级菜单\n");
-    printf("4. 直接退出\n");
-    printf("请选择操作（1-4）：");
-}
-
-// 处理主菜单选择
-void handleMainChoice(int choice) {
-    switch (choice) {
-        case 1:
-            getNode();
-            break;
-        case 2:
-            addNode();
-            break;
-        case 3:
-            runNode();
-            break;
-        case 4:
-            clearScreen();
-            printf("谢谢使用，再见！\n");
-            exit(0); // 结束整个程序
-        default:
-            printf("无效的选择，请重新输入。\n");
+// 显示当前菜单
+void displayMenu(MenuNode_t *node) {
+    printf("\n--- %s ---\n", node->title);
+    for (int i = 0; i < node->child_count; i++) {
+        printf("%d. %s\n", i + 1, node->children[i]->title);
     }
-}
-
-// 处理二级菜单选择
-void handleSubChoice(int subChoice) {
-    switch (subChoice) {
-        case 1:
-            printf("执行二级菜单操作 1\n");
-            break;
-        case 2:
-            printf("执行二级菜单操作 2\n");
-            break;
-        case 3:
-            printf("返回上级菜单\n");
-            break;
-        case 4:
-            clearScreen();
-            printf("谢谢使用，再见！\n");
-            exit(0); // 结束整个程序
-        default:
-            printf("无效的选择，请重新输入。\n");
+    if (node->parent != NULL) {
+        printf("%d. 返回上级菜单\n", node->child_count + 1);
     }
+    printf("输入你的选择: ");
 }
 
-void Menu() {
-    while (1) {
-        clearScreen(); // 在每次循环开始时清屏
+// 处理菜单选择
+int processMenu(MenuNode_t **current_node, Context_t context) {
+    int choice;
+    scanf("%d", &choice);
 
-        displayMainMenu();
-
-        int choice;
-        scanf("%d", &choice);
-
-        handleMainChoice(choice);
-
-        // 二级菜单
-        if (choice == 1 || choice == 2 || choice == 3) {
-            int subChoice;
-            do {
-                clearScreen(); // 在每次循环开始时清屏
-
-                displaySubMenu();
-                scanf("%d", &subChoice);
-
-                handleSubChoice(subChoice);
-            } while (subChoice != 3 && subChoice != 4);
+    if ((*current_node)->parent != NULL) {
+        if (choice < 1 || choice > (*current_node)->child_count + 1) {
+            printf("无效选择，请重试！\n");
+            return 1;
         }
     }
+    else {
+        if (choice < 1 || choice > (*current_node)->child_count) {
+            printf("无效选择，请重试！\n");
+            return 1;
+        }        
+    }
+
+    /*
+    * 如果输入值大于子菜单个数，并且存在上级菜单，则返回上级菜单
+    * 否则，判断子菜单是否存在函数。
+    */
+    if (choice == (*current_node)->child_count + 1 && (*current_node)->parent != NULL) {
+        *current_node = (*current_node)->parent;
+    }
+    else {
+        MenuNode_t *selected_node = (*current_node)->children[choice - 1];
+        if (selected_node->function != NULL) {
+            clearScreen();
+            selected_node->function(context);
+            if (selected_node->function == exit_menu) {
+                return 0; // 退出循环
+            }
+        }
+        else {
+            *current_node = selected_node;
+        }
+    }
+    return 1;
 }
+
+void freeMenu(MenuNode_t* node) {
+    for(size_t i = 0; i < node->child_count; ++i) {
+        freeMenu(node->children[i]);
+    }
+    free(node->title);          // 释放标题，在createMenu里strdup(title);
+    free(node->children);       // 释放子节点数组，在createMenu里realloc(children);
+    free(node);                 // 释放当前节点，在createMenu里malloc(sizeof(MenuNode_t));
+}
+
+MenuNode_t* initMenu() {
+    // 创建菜单(无操作函数)
+    MenuNode_t *m_root = createMenu("主菜单", NULL);
+    MenuNode_t *m_ShowUserInfo = createMenu("显示个人信息", ShowUserInfo_menu);
+    MenuNode_t *m_Tunnel_operations = createMenu("隧道操作", NULL);
+    MenuNode_t *m_Check_in = createMenu("签到", Check_in_menu);
+    MenuNode_t *m_Other = createMenu("其他功能", NULL);
+    MenuNode_t *m_About = createMenu("关于", About_menu);
+    MenuNode_t *m_Exit = createMenu("退出", exit_menu);
+
+    // 注册子菜单
+    RegisterMenu(m_root, m_ShowUserInfo);
+    RegisterMenu(m_root, m_Tunnel_operations);
+    RegisterMenu(m_root, m_Check_in);
+    RegisterMenu(m_root, m_Other);
+    RegisterMenu(m_root, m_About);
+    RegisterMenu(m_root, m_Exit);
+
+    // 隧道操作下子菜单
+    RegisterMenu(m_Tunnel_operations, createMenu("隧道列表", Showtunnellist_menu));
+    RegisterMenu(m_Tunnel_operations, createMenu("下载单个隧道配置文件", DlconfigOne_menu));
+    RegisterMenu(m_Tunnel_operations, createMenu("下载所有隧道配置文件", DlconfigAll_menu));
+    RegisterMenu(m_Tunnel_operations, createMenu("开启隧道服务", Startserver_menu));
+    RegisterMenu(m_Tunnel_operations, createMenu("添加隧道", addtunnel_menu));
+
+    // 其他功能下子菜单
+    RegisterMenu(m_Other, createMenu("软件下载", Dlfrp_menu));
+    RegisterMenu(m_Other, createMenu("服务器状态", Serverstatus_menu));
+    RegisterMenu(m_Other, createMenu("文档", Document_menu));
+
+    return m_root;
+
+    // while (processMenu(&current_node, context)) {
+    //     displayMenu(current_node);
+    // }
+}
+

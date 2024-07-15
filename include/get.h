@@ -10,7 +10,7 @@
 #include "get_request.h"
 
 //获取服务器列表并保留自己有的服务器
-int GetServerList(UserData_t* user);
+int GetUserInfo(UserData_t* user);
 void ShowNode(UserData_t* user);
 
 #endif

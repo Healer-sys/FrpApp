@@ -51,7 +51,7 @@ int GetUserInfo(UserData_t* user) {
 
 
 /*
-    显示节点信息
+    显示隧道列表信息
 */
 void ShowNode(UserData_t* user)
 {

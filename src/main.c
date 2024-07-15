@@ -8,12 +8,13 @@
 #include "Menu.h"
 UserData_t *user;
 
-#define pthreadmax 2
+#define pthreadmax 3
 
 int main(int argc, char **argv)
 {	
-
+	Context_t context;
 	user = (UserData_t *)malloc(sizeof(UserData_t));
+	context.user = user;
 
 	pthread_t tid[pthreadmax];		// 线程句柄
 	int rc;							// 线程返回值
@@ -41,7 +42,6 @@ int main(int argc, char **argv)
 	else {
 		// free_frp_list();
 	}
-	printf("GetFrpServerList return is :%d\n", return_value->result);
 	free(return_value);
 
 	//step 2 登陆并且获取隧道信息
@@ -63,13 +63,17 @@ int main(int argc, char **argv)
 	}
 	else {
 	    get_tunnel(user);
+		MenuNode_t* root = initMenu();
+		displayMenu(root);
+		while (processMenu(&root, context)) {
+			displayMenu(root);
+		}
+		freeMenu(root);
 	}
 	
 	//step 3 菜单显示
-	printf("%d\n",argc);
-	download_one( user);
-
-	// Menu();
+	// GetUserInfo( user);
+	// download_one( user);
 	
 	// ShowAllList();
 	// GetServerList(user);

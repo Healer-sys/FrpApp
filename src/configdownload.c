@@ -1,4 +1,17 @@
 #include "configdownload.h"
+// 去除特殊字符
+void rm_whitespace(char *str) {
+    char *src = str;
+    char *dst = str;
+
+    while (*src != '\0') {
+        if (*src != ' ' && *src != '\t' && *src != '[' && *src != ']') {
+            *dst++ = *src;
+        }
+        src++;
+    }
+    *dst = '\0';
+}
 // 下载配置文件
 void download(UserData_t* user, const char* Servername,const char* Filename) {
     if (user == NULL || user->tunnel == NULL || Servername == NULL || Filename == NULL) {
@@ -96,6 +109,8 @@ void download_all(UserData_t* user) {
                 //设置文件名
                 hash[TunnelTemp->node] = 1;
                 sprintf(Filename, "%s.ini", FrpListTemp->name);
+                // 文件名不能有空格去掉空格
+                rm_whitespace(Filename);
                 download(user, FrpListTemp->name, Filename);
             }
             TunnelTemp = TunnelTemp->next;

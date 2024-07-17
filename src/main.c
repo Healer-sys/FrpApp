@@ -5,6 +5,7 @@
 #include "frp.h"
 #include "tunnel.h"
 #include "configdownload.h"
+#include "register.h"
 #include "Menu.h"
 UserData_t *user;
 
@@ -81,6 +82,7 @@ int main(int argc, char **argv)
 	// download(user, "香港-1号","me.ini");
 	// download_all(user);
 
+	register_user();
 
 	free_tunnellist(user->tunnel);
 	free_frp_list();

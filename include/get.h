@@ -12,5 +12,6 @@
 //获取服务器列表并保留自己有的服务器
 int GetUserInfo(UserData_t* user);
 void ShowNode(UserData_t* user);
+void DoSign(UserData_t* user);
 
 #endif

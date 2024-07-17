@@ -54,3 +54,30 @@ const char *get_url(const char *url) {
     curl_easy_cleanup(curl);
     return data;
 }
+
+// post请求
+char* post_url(const char* url, const char* post_data) {
+
+    CURL *curl = curl_easy_init();
+    if (!curl) {
+        fprintf(stderr, "curl_easy_init failed\n");
+        return NULL;
+    }
+    char *data = NULL;
+    curl_easy_setopt(curl, CURLOPT_URL, url); // 设置链接
+    curl_easy_setopt(curl, CURLOPT_POST, 1L); // 设置为POST请求
+    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, post_data); // 设置POST数据
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, get_data); // 设置回调函数
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &data); // 使用 data 指针
+
+    CURLcode ret = curl_easy_perform(curl);
+    if (ret != CURLE_OK) {
+        fprintf(stderr, "curl_easy_perform failed: %s\n", curl_easy_strerror(ret));
+        free(data); // 确保释放之前分配的内存
+        curl_easy_cleanup(curl);
+        return "err";
+    }
+
+    curl_easy_cleanup(curl);
+    return data;
+}

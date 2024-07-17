@@ -41,8 +41,7 @@ void ShowUserInfo_menu(Context_t context) {
     GetUserInfo(context.user);
 }
 void Check_in_menu(Context_t context) {
-    printf("该项目正在开发中！\n");
-    // CheckIn(context.user);
+    DoSign(context.user);
 }
 void About_menu(Context_t context) {
     printf("该项目正在开发中！\n");
@@ -136,7 +135,7 @@ int processMenu(MenuNode_t **current_node, Context_t context) {
 }
 
 void freeMenu(MenuNode_t* node) {
-    for(size_t i = 0; i < node->child_count; ++i) {
+    for(int i = 0; i < node->child_count; ++i) {
         freeMenu(node->children[i]);
     }
     free(node->title);          // 释放标题，在createMenu里strdup(title);
@@ -149,7 +148,7 @@ MenuNode_t* initMenu() {
     MenuNode_t *m_root = createMenu("主菜单", NULL);
     MenuNode_t *m_ShowUserInfo = createMenu("显示个人信息", ShowUserInfo_menu);
     MenuNode_t *m_Tunnel_operations = createMenu("隧道操作", NULL);
-    MenuNode_t *m_Check_in = createMenu("签到", Check_in_menu);
+    MenuNode_t *m_Check_in = createMenu("签到一下吧", Check_in_menu);
     MenuNode_t *m_Other = createMenu("其他功能", NULL);
     MenuNode_t *m_About = createMenu("关于", About_menu);
     MenuNode_t *m_Exit = createMenu("退出", exit_menu);

@@ -81,7 +81,7 @@ void* GetFrpServerList()
         FrpList = InitFrpList();
     }
     FrpList_t* P = FrpList;
-    char* buffer = get_url("https://api.locyanfrp.cn/Proxies/GetServerList");
+    char* buffer = (char*)get_url("https://api.locyanfrp.cn/Proxies/GetServerList");
     struct json_object *j_GetServerList = json_tokener_parse(buffer);
     if (j_GetServerList == NULL) {
         free(buffer);

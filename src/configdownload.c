@@ -94,7 +94,6 @@ void download_all(UserData_t* user) {
 
     // 初始化hash数组为0，避免未初始化访问
     char hash[100] = {0};
-    Tunnel_t* TunnelTemp = user->tunnel->next;
     FrpList_t* FrpListTemp = GetFrpList()->next;
     char Filename[35];
     //遍历服务器

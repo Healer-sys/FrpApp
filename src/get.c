@@ -72,3 +72,21 @@ void ShowNode(UserData_t* user)
         P = P->next;
     }
 }
+
+void DoSign(UserData_t* user) {
+    char Sign_data[50];
+    snprintf(Sign_data, sizeof(Sign_data), "token=%s", user->token);
+    char* Sign_result = post_url("https://api.locyanfrp.cn/User/DoSign", Sign_data);
+
+    struct json_object *j_Sign_result = json_tokener_parse(Sign_result);
+    if (!j_Sign_result) {
+        printf("JSON解析失败\n");
+        free(Sign_result);  // 释放内存
+        return;
+    }
+
+    printf("%s", get_json_string(j_Sign_result,"message"));
+
+    free(Sign_result);
+    json_object_put(j_Sign_result);
+}

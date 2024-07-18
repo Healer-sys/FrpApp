@@ -42,12 +42,12 @@ int get_json_int(json_object *jso, const char *key) {
     return json_object_get_int(jso_value);
 }
 
-FrpList_t *GetFrpList()
-{
-    return FrpList;
-}
+// FrpList_t *GetFrpList()
+// {
+//     return FrpList;
+// }
 // 根据服务器ID获取服务器信息
-FrpList_t *GetServerForId(int id)
+FrpList_t *GetServerForId(FrpList_t* FrpList, int id)
 {
     if (FrpList == NULL) {
         return NULL;
@@ -61,7 +61,7 @@ FrpList_t *GetServerForId(int id)
     return NULL;
 }
 // 根据服务器名称获取服务器信息
-FrpList_t *GetServerForName(const char* Servername) {
+FrpList_t *GetServerForName(FrpList_t* FrpList, const char* Servername) {
     if (FrpList == NULL) {
         return NULL;
     }
@@ -73,8 +73,9 @@ FrpList_t *GetServerForName(const char* Servername) {
     }
     return NULL;
 }
-void* GetFrpServerList()
+void* GetFrpServerList(void* arg)
 {
+    FrpList_t *FrpList = (FrpList_t *)arg;
     pthread_return* returnval = (pthread_return*)malloc( sizeof(pthread_return) );
     returnval->result = 0;
     if(FrpList == NULL) {
@@ -120,16 +121,16 @@ void* GetFrpServerList()
     pthread_exit((void*)returnval);
 }
 
-int UpdateFrpServerList()
+int UpdateFrpServerList(FrpList_t* FrpList)
 {
-    free_frp_list();
-    if(GetFrpServerList()) {
+    free_frp_list(FrpList);
+    if(GetFrpServerList(FrpList)) {
         return 1;
     }
     return 0;
 }
 
-void ShowAllList()
+void ShowAllList(FrpList_t* FrpList)
 {
     if (FrpList == NULL) {
         return;
@@ -142,16 +143,16 @@ void ShowAllList()
     }
 }
 
-void ShowList(FrpList_t *P)
+void ShowList(FrpList_t *FrpList)
 {
-    if(P == NULL) {
+    if(FrpList == NULL) {
         printf("No server found.\n");
         return;
     }
-    printf("%d %s %s %s %s %s\n", P->id, P->name, P->hostname, P->ip, P->status, P->description);
+    printf("%d %s %s %s %s %s\n", FrpList->id, FrpList->name, FrpList->hostname, FrpList->ip, FrpList->status, FrpList->description);
 }
 
-void free_frp_list()
+void free_frp_list(FrpList_t* FrpList)
 {
     FrpList_t* P;
     while(FrpList != NULL)

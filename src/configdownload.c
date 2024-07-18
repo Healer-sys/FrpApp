@@ -13,7 +13,7 @@ void rm_whitespace(char *str) {
     *dst = '\0';
 }
 // 下载配置文件
-void download(UserData_t* user, const char* Servername,const char* Filename) {
+void download(UserData_t* user, FrpList_t* FrpList, const char* Servername,const char* Filename) {
     if (user == NULL || user->tunnel == NULL || Servername == NULL || Filename == NULL) {
         fprintf(stderr, "参数无效\n");
         return;
@@ -27,7 +27,7 @@ void download(UserData_t* user, const char* Servername,const char* Filename) {
 
     int count = 0;
     Tunnel_t *P = user->tunnel->next;
-    FrpList_t* Server = GetServerForName(Servername);
+    FrpList_t* Server = GetServerForName(FrpList, Servername);
     if (Server == NULL) {
         fprintf(stderr, "未找到服务器: %s\n", Servername);
         fclose(fd);
@@ -82,19 +82,19 @@ void download(UserData_t* user, const char* Servername,const char* Filename) {
     fclose(fd);
 }
 
-void download_all(UserData_t* user) {
+void download_all(UserData_t* user, FrpList_t* FrpList) {
     if (user == NULL ) {
         printf("[download_all : 用户 is NULL]\n");
         return;
     }
-    if ( GetFrpList() == NULL ) {
+    if ( FrpList == NULL ) {
         printf("[download_all : FrpList_t is NULL]\n");
         return;
     }
 
     // 初始化hash数组为0，避免未初始化访问
     char hash[100] = {0};
-    FrpList_t* FrpListTemp = GetFrpList()->next;
+    FrpList_t* FrpListTemp = FrpList->next;
     char Filename[35];
     //遍历服务器
     while(FrpListTemp != NULL)
@@ -110,7 +110,7 @@ void download_all(UserData_t* user) {
                 sprintf(Filename, "%s.ini", FrpListTemp->name);
                 // 文件名不能有空格去掉空格
                 rm_whitespace(Filename);
-                download(user, FrpListTemp->name, Filename);
+                download(user, FrpList, FrpListTemp->name, Filename);
             }
             TunnelTemp = TunnelTemp->next;
         }
@@ -122,7 +122,7 @@ void download_all(UserData_t* user) {
     printf("[下载完成!]\n");
 }
 
-void download_one(UserData_t* user) {
+void download_one(UserData_t* user, FrpList_t* FrpList) {
     // 清屏
     // #ifdef _WIN32
     //     system("cls"); // 在 Windows 上使用 cls 命令
@@ -136,7 +136,7 @@ void download_one(UserData_t* user) {
     }
 
     // 获取服务器列表
-    FrpList_t* FrpListTemp = GetFrpList();
+    FrpList_t* FrpListTemp = FrpList;
     if (FrpListTemp == NULL) {
         printf("[download_one: FrpList_t 为空]\n");
         return;
@@ -174,7 +174,7 @@ void download_one(UserData_t* user) {
 
     // 下载选择的服务器配置
     if (flag > 0 && flag <= count) {
-        download(user, Servername[flag], "frps.ini");
+        download(user, FrpList, Servername[flag], "frps.ini");
         printf("[下载完成！]\n");
     } else {
         printf("[错误：无效的选择]\n");

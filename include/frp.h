@@ -25,21 +25,54 @@ typedef struct {
 
 // 初始化链表
 FrpList_t* InitFrpList();
-static FrpList_t* FrpList = NULL;
 
 int get_json_int(json_object *jso, const char *key);
 char* get_json_string(json_object *jso, const char *key);
 
-FrpList_t* GetFrpList();
-FrpList_t* GetServerForId(int id);
-FrpList_t* GetServerForName(const char* Servername);
-// 获取服务器列表
-void* GetFrpServerList();
-// 更新服务器列表
-int UpdateFrpServerList();
+/*
+ * 通过id获取服务器列表
+ * @param FrpList 服务器列表
+ * @param id 服务器id
+ * @return 服务器信息
+ */
+FrpList_t* GetServerForId(FrpList_t* FrpList, int id);
+/*
+* 通过服务器名字获取服务器列表
+* @param FrpList 服务器列表
+* @param Servername 服务器名字
+* @return 服务器信息
+*/
+FrpList_t* GetServerForName(FrpList_t* FrpList, const char* Servername);
+/*
+* 获取服务器列表
+* @param FrpList 服务器列表
+* @return void* 1 成功 0 失败(void* 使用多线程的pthread_exit 返回)
+*/ 
+void* GetFrpServerList(void* arg);
+/*
+* 更新服务器列表
+* @param FrpList 服务器列表
+* @return 1 成功 0 失败
+*/
+int UpdateFrpServerList(FrpList_t* FrpList);
 // 显示服务器列表
-void ShowAllList();
-void ShowList(FrpList_t* P);
-void free_frp_list();
+/*
+* 显示服务器列表
+* @param FrpList 服务器列表
+* @return void
+*/
+void ShowAllList(FrpList_t* FrpList);
+/*
+* 显示服务器列表
+* @param FrpList 服务器列表
+* @return void
+*/
+void ShowList(FrpList_t* FrpList);
+/*
+* 释放服务器列表
+* @param FrpList 服务器列表
+* @return void
+*/
+void free_frp_list(FrpList_t* FrpList);
 
 #endif

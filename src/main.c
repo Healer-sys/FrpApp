@@ -7,15 +7,17 @@
 #include "configdownload.h"
 #include "register.h"
 #include "Menu.h"
-UserData_t *user;
 
 #define pthreadmax 3
 
 int main(int argc, char **argv)
 {	
 	Context_t context;
-	user = (UserData_t *)malloc(sizeof(UserData_t));
+	UserData_t* user = (UserData_t *)malloc(sizeof(UserData_t));
 	context.user = user;
+
+	FrpList_t* FrpList = InitFrpList();
+	context.srever = FrpList;
 
 	pthread_t tid[pthreadmax];		// 线程句柄
 	int rc;							// 线程返回值
@@ -27,7 +29,7 @@ int main(int argc, char **argv)
         printf("welcome线程创建失败");
         return 0;
     }
-	rc = pthread_create(&tid[1], NULL, GetFrpServerList, NULL);
+	rc = pthread_create(&tid[1], NULL, GetFrpServerList, (void*)FrpList);
 	if (rc != 0) {
         printf("GetFrpServerList线程创建失败");
         return 0;
@@ -53,7 +55,7 @@ int main(int argc, char **argv)
 
 	if( !login(user) ) {
 		//printf("ok\n");
-		free_frp_list();
+		free_frp_list(context.srever);
 		if (argc > 2) {
 			free(user->password);
 			free(user->username);
@@ -82,10 +84,10 @@ int main(int argc, char **argv)
 	// download(user, "香港-1号","me.ini");
 	// download_all(user);
 
-	register_user();
+	// register_user();
 
+	free_frp_list(FrpList);
 	free_tunnellist(user->tunnel);
-	free_frp_list();
 	free(user->frptoken);
 	free(user->password);
 	free(user->token);

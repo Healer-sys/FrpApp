@@ -35,6 +35,7 @@ MenuNode_t* createMenu(const char *title, void (*function)(Context_t)) {
 }
 
 void exit_menu(Context_t context) {
+    if (context.srever){}
     printf("谢谢使用，再见！\n");
 }
 void ShowUserInfo_menu(Context_t context) {
@@ -44,35 +45,35 @@ void Check_in_menu(Context_t context) {
     DoSign(context.user);
 }
 void About_menu(Context_t context) {
-    printf("该项目正在开发中！\n");
+    printf("user : %p该项目正在开发中！\n", context.user);
 }
 void Showtunnellist_menu(Context_t context) {
-    ShowNode(context.user);
+    ShowNode(context.user, context.srever);
 }
 void DlconfigOne_menu(Context_t context) {
-    download_one(context.user);
+    download_one(context.user, context.srever);
 }
 void DlconfigAll_menu(Context_t context) {
-    download_all(context.user);
+    download_all(context.user, context.srever);
 }
 void Startserver_menu(Context_t context) {
-    printf("该项目正在开发中！\n");
+    printf("user : %p该项目正在开发中！\n", context.user);
     // StartServer(context.user);
 }
 void addtunnel_menu(Context_t context) {
-    printf("该项目正在开发中！\n");
+    printf("user : %p该项目正在开发中！\n", context.user);
     // AddTunnel(context.user);
 }
 void Dlfrp_menu(Context_t context) {
-    printf("该项目正在开发中！\n");
+    printf("user : %p该项目正在开发中！\n", context.user);
     // DownloadFrp(context.user);
 }
 void Serverstatus_menu(Context_t context) {
-    printf("该项目正在开发中！\n");
+    printf("user : %p该项目正在开发中！\n", context.user);
     // ServerStatus(context.user);
 }
 void Document_menu(Context_t context) {
-    printf("该项目正在开发中！\n");
+    printf("user : %p该项目正在开发中！\n", context.user);
 }
 // 添加菜单点到父菜单上
 void RegisterMenu(MenuNode_t *parent, MenuNode_t *child) {

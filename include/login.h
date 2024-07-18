@@ -8,7 +8,11 @@
 #include "get_request.h"
 #include "data.h"
 #include "json-c/json.h"
-
+/*
+* 登录
+* @param user 用户结构体
+* @return 1 登录成功 0 登录失败
+*/
 char login(UserData_t *user);
 
 #endif

@@ -1,6 +1,8 @@
 #include "get.h"
 
-//获取用户信息
+/*
+* 获取用户信息
+*/
 int GetUserInfo(UserData_t* user) {
     
     if (!user || !user->username || !user->token) {
@@ -51,15 +53,15 @@ int GetUserInfo(UserData_t* user) {
 
 
 /*
-    显示隧道列表信息
+* 显示隧道列表信息
 */
-void ShowNode(UserData_t* user)
+void ShowNode(UserData_t* user, FrpList_t* FrpList)
 {
     int count = 0;
     Tunnel_t *P = user->tunnel->next;
     while(P != NULL )
     {
-        FrpList_t* Server = GetServerForId(P->node);
+        FrpList_t* Server = GetServerForId(FrpList, P->node);
         printf("***************************************************************************************************************\n");
         printf("*隧道->%d\n",++count);
         printf("*服务名字:%s\n",Server->name);
@@ -72,7 +74,9 @@ void ShowNode(UserData_t* user)
         P = P->next;
     }
 }
-
+/*
+* 签到
+*/
 void DoSign(UserData_t* user) {
     char Sign_data[50];
     snprintf(Sign_data, sizeof(Sign_data), "token=%s", user->token);

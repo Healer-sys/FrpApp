@@ -24,8 +24,15 @@
 }
  */
 
-
+/*
+* 获取隧道列表
+* @param user 用户
+*/
 void get_tunnel(UserData_t *user);
+/*
+* 释放隧道列表
+* @param P 隧道结构体
+*/
 void free_tunnellist(Tunnel_t *P);
 
 #endif

@@ -57,8 +57,9 @@ void DlconfigAll_menu(Context_t context) {
     download_all(context.user, context.srever);
 }
 void Startserver_menu(Context_t context) {
-    printf("user : %p该项目正在开发中！\n", context.user);
-    // StartServer(context.user);
+    if (context.user != NULL) {
+        system("./frp/frpc -c frpc.ini");
+    }
 }
 void addtunnel_menu(Context_t context) {
     printf("user : %p该项目正在开发中！\n", context.user);
@@ -74,7 +75,8 @@ void Dlfrp_menu(Context_t context) {
     }
 }
 void Serverstatus_menu(Context_t context) {
-    printf("user : %p该项目正在开发中！\n", context.user);
+    ShowAllList(context.srever);
+    // printf("user : %p该项目正在开发中！\n", context.user);
     // ServerStatus(context.user);
 }
 void Document_menu(Context_t context) {

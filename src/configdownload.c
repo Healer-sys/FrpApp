@@ -174,7 +174,7 @@ void download_one(UserData_t* user, FrpList_t* FrpList) {
 
     // 下载选择的服务器配置
     if (flag > 0 && flag <= count) {
-        download(user, FrpList, Servername[flag], "frps.ini");
+        download(user, FrpList, Servername[flag], "frpc.ini");
         printf("[下载完成！]\n");
     } else {
         printf("[错误：无效的选择]\n");

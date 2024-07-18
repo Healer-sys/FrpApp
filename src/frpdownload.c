@@ -15,15 +15,15 @@ int FrpDownload() {
     if (strcmp(sys_info.machine, "x86_64") == 0) {
         strncpy(filename, "frp_0.38.0_linux_amd64", sizeof(filename));
     } else if (strcmp(sys_info.machine, "aarch64") == 0) {
-        strncpy(filename, "frp_0.38.0_linux_amd6464", sizeof(filename));
+        strncpy(filename, "frp_0.38.0_linux_arm64", sizeof(filename));
     } else if (strcmp(sys_info.machine, "armv7l") == 0) {
-        strncpy(filename, "frp_0.38.0_linux_amd64", sizeof(filename));
+        strncpy(filename, "frp_0.38.0_linux_arm", sizeof(filename));
     } else {
         printf("未找到适合该内核架构的FRP版本\n");
         return 1;
     }
     snprintf(command, sizeof(command), 
-            "wget -q https://github.com/fatedier/frp/releases/download/v0.38.0/%s.tar.gz", filename);
+            "wget -q https://mirror.ghproxy.com/https://github.com/fatedier/frp/releases/download/v0.38.0/%s.tar.gz", filename);
 
     // 执行下载命令
     system(command);

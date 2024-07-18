@@ -65,8 +65,13 @@ void addtunnel_menu(Context_t context) {
     // AddTunnel(context.user);
 }
 void Dlfrp_menu(Context_t context) {
-    printf("user : %p该项目正在开发中！\n", context.user);
-    // DownloadFrp(context.user);
+    
+    if( FrpDownload() || context.user == NULL ) {
+        printf("下载失败！\n");
+    }
+    else {
+        printf("下载成功！\n");
+    }
 }
 void Serverstatus_menu(Context_t context) {
     printf("user : %p该项目正在开发中！\n", context.user);

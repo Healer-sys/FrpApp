@@ -1,5 +1,6 @@
 /.vscode
 /bin/*
+/frp/
 # Object files
 *.o
 *.sbr

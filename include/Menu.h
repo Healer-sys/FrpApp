@@ -9,6 +9,7 @@
 #include "frp.h"
 #include "user.h"
 #include "configdownload.h"
+#include "frpdownload.h"
 
 //上下文内容  实现传参
 typedef struct StructContext {

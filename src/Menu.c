@@ -58,7 +58,28 @@ void DlconfigAll_menu(Context_t context) {
 }
 void Startserver_menu(Context_t context) {
     if (context.user != NULL) {
-        system("./frp/frpc -c frpc.ini");
+        // 检查frpc.ini文件是否存在
+        // 此处使用了简单的文件存在性检查，实际应用中可能需要更复杂的逻辑
+        if(access("./frpc.ini", F_OK) == -1) {
+            printf("frpc.ini文件不存在或不可访问！ 请下载配置文件\n");
+            return;
+        }
+        int ret = system("screen -dmS frpc ./frp/frpc -c frpc.ini");
+        if(ret == 0){
+            printf("启动成功！\n");
+        }
+        else if (ret == 1) {
+            printf("未知错误！\n");
+        } 
+        else if(ret == -1) {
+            printf("创建子进程失败！\n");
+        }
+        else if(ret == 126) {
+            printf("运行时出错！\n");
+        }
+        else if(ret == 127) {
+            printf("命令不可执行! 检查是否安装frp和screen。\n");
+        }
     }
 }
 void addtunnel_menu(Context_t context) {

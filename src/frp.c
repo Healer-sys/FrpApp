@@ -132,15 +132,12 @@ int UpdateFrpServerList(FrpList_t* FrpList)
 
 void ShowAllList(FrpList_t* FrpList)
 {
-    if (FrpList == NULL) {
+    if (FrpList == NULL || FrpList->next == NULL) {
         return;
     }
     FrpList_t* P = FrpList->next;
-    while(P != NULL)
-    {
-        ShowList(P);
-        P = P->next;
-    }
+    ShowAllList(P);
+    ShowList(P);
 }
 
 void ShowList(FrpList_t *FrpList)

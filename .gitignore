@@ -1,15 +1,27 @@
+# 文件夹
 /.vscode
 /bin/*
 /frp/
-# Object files
+/CMakeFiles/*
+/build/*
+
+# gcc目标文件
 *.o
 *.sbr
 
-# Debugger files
-# define exception below if needed
+# 调试器文件
+# 如果需要，在下面定义异常
 *.ini
 *.json
 *.log
 *.txt
 *.xml
 *.json
+*.cmake
+
+!CMakeLists.txt
+Makefile
+
+# 二进制文件
+main
+FrpApp
